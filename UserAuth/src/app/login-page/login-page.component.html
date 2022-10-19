@@ -1,0 +1,15 @@
+<div class="content">
+  <p>Enter User Name</p>
+  <input type="text" id="username" value="rootName" #username />
+  <p>Enter Password</p>
+  <input type="text" id="password" value="rootPassword" #password />
+  <br />
+  <button (click)="submitClicked(username.value, password.value)">SUBMIT</button>
+  <p *ngIf="status === 'invalidCredentials'">Name or password can not be empty!</p>
+</div>
+
+<div class="user-data">
+  <p>Name: {{ name }}</p>
+  <p>Surname: {{ surname }}</p>
+  <p>Email: {{ email }}</p>
+</div>
