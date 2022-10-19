@@ -34,4 +34,13 @@ export class UserAuthService {
       }
     );
   }
+
+  public authorizeRequest(sessionCode: string) : Observable<boolean>{
+    return this.http.get<boolean>(`${this.url}/api/v1/authorize`,
+    {
+      headers: new HttpHeaders({
+        UserSessionCode: sessionCode.toString(),
+      }),
+    })
+  }
 }

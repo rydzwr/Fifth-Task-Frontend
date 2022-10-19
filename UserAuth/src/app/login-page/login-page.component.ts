@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { UserAuthorizationJsonResponse } from '../model/UserAuthorizationJsonResponse';
 import { UserAuthService } from '../service/user-auth.service';
@@ -8,7 +9,7 @@ import { UserAuthService } from '../service/user-auth.service';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css'],
 })
-export class LoginPageComponent implements OnInit{
+export class LoginPageComponent implements OnInit {
   public name = '';
   public surname = '';
   public email = '';
@@ -17,17 +18,21 @@ export class LoginPageComponent implements OnInit{
 
   public status = '';
 
-  constructor(private _service: UserAuthService, private _cookieService: CookieService) {}
+  constructor(
+    private _service: UserAuthService,
+    private _cookieService: CookieService,
+    private _router: Router
+  ) {}
   ngOnInit(): void {
     if (this._cookieService.get('userSessionCode').trim() !== '') {
       this.userSessionCode = this._cookieService.get('userSessionCode');
       this._service
-          .getUserDetails(this.userSessionCode)
-          .subscribe((res: UserAuthorizationJsonResponse) => {
-            this.name = res.name;
-            this.surname = res.surname;
-            this.email = res.email;
-          });
+        .getUserDetails(this.userSessionCode)
+        .subscribe((res: UserAuthorizationJsonResponse) => {
+          this.name = res.name;
+          this.surname = res.surname;
+          this.email = res.email;
+        });
     }
   }
 
@@ -51,5 +56,18 @@ export class LoginPageComponent implements OnInit{
 
   public clearCookiesClicked() {
     this._cookieService.deleteAll();
+  }
+
+  public redirectToHomeClicked() {
+    const code = this._cookieService.get('userSessionCode').toString();
+    if (
+      code.trim() !== '' &&
+      this._service.authorizeRequest(code.toString())
+    ) {
+      this._router.navigate(['home']);
+    }
+    else{
+      throw new Error('Unauthorized');
+    }
   }
 }
