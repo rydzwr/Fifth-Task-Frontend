@@ -25,16 +25,13 @@ export class UserAuthService {
   public getUserDetails(
     sessionCode: string
   ): Observable<UserAuthorizationJsonResponse> {
-    console.log(sessionCode)
     return this.http.get<UserAuthorizationJsonResponse>(
       `${this.url}/api/v1/userDetails`,
-      { headers: this.createHeader(sessionCode) }
+      {
+        headers: new HttpHeaders({
+          UserSessionCode: sessionCode.toString(),
+        }),
+      }
     );
-  }
-
-  public createHeader(inn: string): HttpHeaders {
-    let header = new HttpHeaders();
-    header = header.append('UserSessionCode', inn);
-    return header;
   }
 }

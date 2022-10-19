@@ -4,12 +4,18 @@
   <p>Enter Password</p>
   <input type="text" id="password" value="rootPassword" #password />
   <br />
-  <button (click)="submitClicked(username.value, password.value)">SUBMIT</button>
-  <p *ngIf="status === 'invalidCredentials'">Name or password can not be empty!</p>
+  <button (click)="submitClicked(username.value, password.value)">
+    SUBMIT
+  </button>
+  <p *ngIf="status === 'invalidCredentials'">
+    Name or password can not be empty!
+  </p>
 </div>
 
 <div class="user-data">
   <p>Name: {{ name }}</p>
   <p>Surname: {{ surname }}</p>
   <p>Email: {{ email }}</p>
+  <br>
+  <button (click)="clearCookiesClicked()">CLEAR COOKIES</button>
 </div>
