@@ -18,6 +18,8 @@ export class LoginPageComponent implements OnInit {
 
   public status = '';
 
+  public isLoggedIn = false;
+
   constructor(
     private _service: UserAuthService,
     private _cookieService: CookieService,

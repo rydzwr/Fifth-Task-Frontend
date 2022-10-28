@@ -30,7 +30,7 @@ export class UserAuthService {
       {
         headers: new HttpHeaders({
           UserSessionCode: sessionCode.toString(),
-        }),
+        })
       }
     );
   }
