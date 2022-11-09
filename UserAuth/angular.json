@@ -102,5 +102,7 @@
       }
     }
   },
-  "defaultProject": "UserAuth"
+  "cli": {
+    "analytics": false
+  }
 }

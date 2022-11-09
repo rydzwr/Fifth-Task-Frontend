@@ -14,33 +14,10 @@ export class UserAuthService {
   ) {}
 
   public login(name: string, password: string): Observable<string> {
-    const body: UserAuthorizationJsonRequest = {
-      name: name,
-      password: password,
-    };
-
-    return this.http.post<string>(`${this.url}/api/v1/login`, body);
-  }
-
-  public getUserDetails(
-    sessionCode: string
-  ): Observable<UserAuthorizationJsonResponse> {
-    return this.http.get<UserAuthorizationJsonResponse>(
-      `${this.url}/api/v1/userDetails`,
-      {
-        headers: new HttpHeaders({
-          UserSessionCode: sessionCode.toString(),
-        })
-      }
-    );
-  }
-
-  public authorizeRequest(sessionCode: string) : Observable<boolean>{
-    return this.http.get<boolean>(`${this.url}/api/v1/authorize`,
-    {
+    return this.http.get<string>(`${this.url}/api/v1/home`, {
       headers: new HttpHeaders({
-        UserSessionCode: sessionCode.toString(),
-      }),
-    })
+        'Authorization': 'Basic ' + btoa(`${name}:${password}`)
+      })
+    });
   }
 }
