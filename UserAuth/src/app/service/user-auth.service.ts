@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UserAuthorizationJsonResponse } from '../model/UserAuthorizationJsonResponse';
-import { UserAuthorizationJsonRequest } from '../model/UserAuthorizationJsonRequest';
 import { Observable } from 'rxjs';
+import { JsonResponse } from '../model/JsonResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +12,8 @@ export class UserAuthService {
     @Inject('SERVER_URL') private url: String
   ) {}
 
-  public login(name: string, password: string): Observable<string> {
-    return this.http.get<string>(`${this.url}/api/v1/home`, {
+  public login(name: string, password: string): Observable<JsonResponse> {
+    return this.http.get<JsonResponse>(`${this.url}/api/v1/login`, {
       headers: new HttpHeaders({
         'Authorization': 'Basic ' + btoa(`${name}:${password}`)
       })

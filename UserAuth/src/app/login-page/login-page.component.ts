@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { JsonResponse } from '../model/JsonResponse';
 import { UserAuthService } from '../service/user-auth.service';
 
 @Component({
@@ -8,15 +9,7 @@ import { UserAuthService } from '../service/user-auth.service';
   styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent implements OnInit {
-  public name = '';
-  public surname = '';
-  public email = '';
-
-  public userSessionCode = '';
-
   public status = '';
-
-  public isLoggedIn = false;
 
   constructor(
     private _service: UserAuthService,
@@ -27,8 +20,9 @@ export class LoginPageComponent implements OnInit {
 
   public submitClicked(name: string, password: string) {
     if (name.trim() !== '' && password.trim() !== '') {
-      this._service.login(name, password).subscribe((res: string) => {
-        console.log(res);
+      this._service.login(name, password).subscribe((res: JsonResponse) => {
+        const route = res.role === "admin" ? "admin" : "user";
+          this._router.navigate([route]);
       });
     } else {
       this.status = 'invalidCredentials';
