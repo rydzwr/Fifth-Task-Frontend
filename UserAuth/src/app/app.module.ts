@@ -7,9 +7,10 @@ import { AppComponent } from './app.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginPageComponent, UserComponent, AdminComponent],
+  declarations: [AppComponent, LoginPageComponent, UserComponent, AdminComponent, ForbiddenComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [{ provide: 'SERVER_URL', useValue: 'http://localhost:5000' }],
   bootstrap: [AppComponent],

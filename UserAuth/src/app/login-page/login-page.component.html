@@ -1,13 +1,13 @@
 <div class="content">
   <p>Enter User Name</p>
-  <input type="text" id="username" value="admin" #username />
+  <input type="text" value="admin" #username />
   <p>Enter Password</p>
-  <input type="text" id="password" value="admin123" #password />
+  <input type="text" value="admin123" #password />
   <br />
   <button (click)="submitClicked(username.value, password.value)">
     SUBMIT
   </button>
-  <p *ngIf="status === 'invalidCredentials'">
-    Name or password can not be empty!
-  </p>
+  <p *ngIf="status === 'invalidCredentials'">Invalid Credentials</p>
+  <p *ngIf="status === 'networkErr'">Something went wrong!</p>
+  <p *ngIf="status === 'validationErr'">Name or password can not be empty!</p>
 </div>
