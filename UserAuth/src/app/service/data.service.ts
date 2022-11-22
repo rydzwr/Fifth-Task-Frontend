@@ -9,26 +9,22 @@ import { UserAuthService } from './user-auth.service';
 })
 export class DataService {
   constructor(
-    private _authService: UserAuthService,
     private http: HttpClient,
+    private auth: UserAuthService,
     @Inject('SERVER_URL') private url: String
   ) {}
 
   public getUserData(): Observable<UserData> {
-    return this.http.get<UserData>(`${this.url}/api/v1/data/user`, {
+    return this.http.get<UserData>(`${this.url}/api/data/user`, {
       withCredentials: true,
-      headers: new HttpHeaders({
-        "X-Requested-With": "XMLHttpRequest"
-      })
+      headers: this.auth.authHeader
     });
   }
 
   public getAdminData(): Observable<UserData> {
-    return this.http.get<UserData>(`${this.url}/api/v1/data/admin`, {
+    return this.http.get<UserData>(`${this.url}/api/data/admin`, {
       withCredentials: true,
-      headers: new HttpHeaders({
-        "X-Requested-With": "XMLHttpRequest"
-      })
+      headers: this.auth.authHeader
     });
   }
 }

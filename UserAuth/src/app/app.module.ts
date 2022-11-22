@@ -12,7 +12,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 @NgModule({
   declarations: [AppComponent, LoginPageComponent, UserComponent, AdminComponent, ForbiddenComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
-  providers: [{ provide: 'SERVER_URL', useValue: 'http://localhost:5000' }],
+  providers: [{ provide: 'SERVER_URL', useValue: 'http://localhost:8080' }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

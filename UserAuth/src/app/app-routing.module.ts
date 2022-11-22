@@ -13,13 +13,13 @@ const routes: Routes = [
     path: 'user',
     component: UserComponent,
     canActivate: [UserAuthService],
-    data: { role: 'USER' },
+    data: { role: 'ROLE_USER' },
   },
   {
     path: 'admin',
     component: AdminComponent,
     canActivate: [UserAuthService],
-    data: { role: 'ADMIN' },
+    data: { role: 'ROLE_ADMIN' },
   },
   {
     path: 'forbidden',
