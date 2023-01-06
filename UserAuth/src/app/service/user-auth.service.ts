@@ -10,8 +10,9 @@ import {
   ActivatedRouteSnapshot,
   CanActivate,
   Router,
-  RouterStateSnapshot
+  RouterStateSnapshot,
 } from '@angular/router';
+import { UserDto } from '../model/UserDto';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class UserAuthService implements CanActivate {
   private _accessToken;
   private _role;
 
-  private _refreshInterval = interval(4000);
+  private _refreshInterval = interval(400000);
 
   public get loggedIn() {
     return this._loggedIn;
@@ -39,7 +40,7 @@ export class UserAuthService implements CanActivate {
   public get authHeader(): HttpHeaders {
     return new HttpHeaders({
       'X-Requested-With': 'XMLHttpRequest',
-      'Authorization': 'Bearer ' + this._accessToken
+      Authorization: 'Bearer ' + this._accessToken,
     });
   }
 
@@ -48,11 +49,11 @@ export class UserAuthService implements CanActivate {
     private router: Router,
     @Inject('SERVER_URL') private url: String
   ) {
-    this._loggedIn = sessionStorage.getItem("loggedIn") ? true : false;
-    this._username = sessionStorage.getItem("username") ?? "";
-    this._role = sessionStorage.getItem("role") ?? "";
-    this._accessToken = sessionStorage.getItem("access_token") ?? "";
-    this._refreshInterval.subscribe(val => this.refreshToken());
+    this._loggedIn = sessionStorage.getItem('loggedIn') ? true : false;
+    this._username = sessionStorage.getItem('username') ?? '';
+    this._role = sessionStorage.getItem('role') ?? '';
+    this._accessToken = sessionStorage.getItem('access_token') ?? '';
+    this._refreshInterval.subscribe((val) => this.refreshToken());
   }
 
   public canActivate(
@@ -83,7 +84,8 @@ export class UserAuthService implements CanActivate {
           withCredentials: true,
           headers: new HttpHeaders({
             'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: 'Basic ' + btoa(`${name}:${password}`),
           }),
         })
         .pipe(
@@ -102,6 +104,8 @@ export class UserAuthService implements CanActivate {
           })
         )
         .subscribe((res) => {
+          console.log(res.role);
+          console.log(res.access_token);
           this._username = name;
           this._role = res.role;
           this._loggedIn = true;
@@ -110,6 +114,35 @@ export class UserAuthService implements CanActivate {
           sessionStorage.setItem('role', this._role);
           sessionStorage.setItem('loggedIn', this._loggedIn ? 'true' : 'false');
           sessionStorage.setItem('access_token', this._accessToken);
+          resolve(true);
+        });
+    });
+  }
+
+  public register(name: string, password: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const body: UserDto = { name: name, password: password };
+
+      console.log(body.name + ' ' + body.password);
+
+      this.http
+        .post(`${this.url}/api/user/register`, body)
+        .pipe(
+          catchError((err) => {
+            const httpErr = err as HttpErrorResponse;
+            if (httpErr.status === 0) {
+              console.log('Network error occured!');
+              reject();
+            } else if (httpErr.status === 401) {
+              console.log('Invalid credentials!');
+              resolve(false);
+            } else {
+              reject();
+            }
+            return throwError(() => new Error());
+          })
+        )
+        .subscribe(() => {
           resolve(true);
         });
     });
@@ -125,7 +158,7 @@ export class UserAuthService implements CanActivate {
         this._username = '';
         this._role = '';
         this._loggedIn = false;
-        this._accessToken = "";
+        this._accessToken = '';
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('role');
         sessionStorage.removeItem('loggedIn');
